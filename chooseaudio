@@ -9,6 +9,11 @@ pacmd set-default-sink mono
 # Set audio sinks before using!
 # `pactl list sinks` if on pulseaudio.
 
+mono () { \
+  pacmd set-default-sink "SET SINK NAME" &
+  notify-send  -h string:bgcolor:#a3be8c "Audio switched to mono!"
+}
+
 headphones () { \
   pacmd set-default-sink "SET SINK NAME" &
   notify-send  -h string:bgcolor:#a3be8c "Audio switched to headphones!"
@@ -25,11 +30,12 @@ bluetooth () { \
 }
 
 chooseaudio() { \
-  choice=$(printf "Headphones\\nSpeakers\\nBluetooth" | dmenu -c -l 3 -i -p "Choose output: ")
+  choice=$(printf "Headphones\\nSpeakers\\nBluetooth\\nMono" | dmenu -c -l 3 -i -p "Choose output: ")
   case "$choice" in
     Headphones) headphones;;
     Speakers) speakers;;
     Bluetooth) bluetooth;;
+    Mono) mono;;
   esac
 }
 
