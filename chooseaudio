@@ -1,0 +1,36 @@
+#!/bin/bash
+
+# Load the module and re-map
+pacmd load-module module-remap-sink master=alsa_output.pci-0000_00_1f.5.analog-stereo sink_name=mono channels=2 channel_map=mono,mono
+
+# Set the new default sink
+pacmd set-default-sink mono
+
+# Set audio sinks before using!
+# `pactl list sinks` if on pulseaudio.
+
+headphones () { \
+  pacmd set-default-sink "SET SINK NAME" &
+  notify-send  -h string:bgcolor:#a3be8c "Audio switched to headphones!"
+}
+
+speakers () { \
+  pacmd set-default-sink "SET SINK NAME" &
+  notify-send  -h string:bgcolor:#bf616a "Audio switched to speakers!"
+}
+
+bluetooth () { \
+  pacmd set-default-sink "SET SINK NAME" &
+  notify-send  -h string:bgcolor:#88c0d0 "Audio switched to bluetooth!"
+}
+
+chooseaudio() { \
+  choice=$(printf "Headphones\\nSpeakers\\nBluetooth" | dmenu -c -l 3 -i -p "Choose output: ")
+  case "$choice" in
+    Headphones) headphones;;
+    Speakers) speakers;;
+    Bluetooth) bluetooth;;
+  esac
+}
+
+chooseaudio
